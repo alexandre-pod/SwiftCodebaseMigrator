@@ -30,7 +30,8 @@ struct FileRewriter {
     private func rewriters() -> [SyntaxRewriter] {
         [
             MainActorAdder(),
-            AssemblyMigrator()
+            AssemblyMigrator(),
+            SendableInserter()
         ]
     }
 }

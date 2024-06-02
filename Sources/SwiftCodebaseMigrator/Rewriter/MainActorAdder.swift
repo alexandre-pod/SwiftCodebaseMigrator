@@ -37,7 +37,7 @@ final class MainActorAdder: SyntaxRewriter {
 
     // MARK: - Private
 
-    static let concernedProtocolSuffixes = [
+    private static let concernedProtocolSuffixes = [
         "Presenter",
         "PresenterDelegate",
         "ViewContract",
@@ -45,22 +45,22 @@ final class MainActorAdder: SyntaxRewriter {
         "ViewDelegate",
         "ViewCellDelegate"
     ]
-    static let concernedClassSuffixes = [
+    private static let concernedClassSuffixes = [
         "Coordinator",
         "ViewModelMapper"
     ] // ["PresenterImplementation", "Coordinator"]
-    static let concernedStructSuffixes = ["ViewModelMapper"] // "ViewModel" ?
+    private static let concernedStructSuffixes = ["ViewModelMapper"] // "ViewModel" ?
 
     private func shouldAddMainActorToProtocol(withName name: String) -> Bool {
-        return MainActorAdder.concernedProtocolSuffixes.contains { name.hasSuffix($0) }
+        return Self.concernedProtocolSuffixes.contains { name.hasSuffix($0) }
     }
 
     private func shouldAddMainActorToClass(withName name: String) -> Bool {
-        return MainActorAdder.concernedClassSuffixes.contains { name.hasSuffix($0) }
+        return Self.concernedClassSuffixes.contains { name.hasSuffix($0) }
     }
 
     private func shouldAddMainActorToStruct(withName name: String) -> Bool {
-        return MainActorAdder.concernedStructSuffixes.contains { name.hasSuffix($0) }
+        return Self.concernedStructSuffixes.contains { name.hasSuffix($0) }
     }
 }
 
@@ -136,19 +136,5 @@ private extension StructDeclSyntax {
             )
         ))
         return self
-    }
-}
-
-extension AttributeListSyntax {
-    var containsMainActorAttribute: Bool {
-        return contains { element in
-            switch element {
-            case .attribute(let attribute):
-                guard let identifier = attribute.attributeName.as(IdentifierTypeSyntax.self) else { return false }
-                return identifier.name.text == "MainActor"
-            case .ifConfigDecl:
-                return false
-            }
-        }
     }
 }
