@@ -20,6 +20,7 @@ struct SwiftCodebaseMigrator: AsyncParsableCommand, Sendable {
     }
 
     mutating func run() async throws {
+        setbuf(__stdoutp, nil);
         let fileURLs = getFileURLs()
         let fileRewriter = FileRewriter()
 
